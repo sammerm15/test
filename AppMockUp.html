@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Dating App Mockup</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for a modern look */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f2f5 0%, #e0e4eb 100%); /* Subtle gradient background */
+            display: flex;
+            flex-direction: column; /* Column direction for header and content */
+            justify-content: flex-start; /* Align to start for header */
+            align-items: center; /* Center horizontally */
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .header {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px; /* Reduced padding for sleeker look */
+            margin-bottom: 25px;
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Reduced gap */
+            animation: fadeIn 0.8s ease-out;
+        }
+        .header button {
+            background: none;
+            color: #9333ea; /* Darker purple for inactive tabs */
+            padding: 12px 25px; /* More padding for tab-like buttons */
+            border-radius: 10px; /* More rounded tabs */
+            font-weight: 700; /* Bolder text */
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            border: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .header button::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px; /* Underline effect */
+            background: linear-gradient(90deg, #a78bfa, #8b5cf6); /* Purple gradient underline */
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease-out;
+            border-radius: 2px;
+            z-index: -1;
+        }
+        .header button:hover::before {
+            transform: scaleX(1);
+            transform-origin: bottom left;
+        }
+        .header button.active {
+            color: #6d28d9; /* Active tab text color */
+            background-color: #f3e8ff; /* Light purple background for active tab */
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.2);
+        }
+        .header button.active::before {
+            transform: scaleX(1); /* Ensure underline is active */
+            background: linear-gradient(90deg, #8b5cf6, #6d28d9); /* Solid gradient for active underline */
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 25px; /* Even more rounded corners for main container */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18); /* Deeper, softer shadow */
+            padding: 40px; /* Increased padding */
+            max-width: 1000px; /* Wider container */
+            width: 100%;
+            display: flex; /* Use flexbox for screen content */
+            flex-direction: column;
+            gap: 40px; /* Increased gap */
+            animation: fadeIn 0.8s ease-out; /* Fade-in animation for container */
+        }
+        /* Screen specific styling */
+        .screen {
+            display: none; /* Hidden by default */
+            width: 100%;
+            animation: slideIn 0.5s ease-out; /* Slide-in animation for screens */
+            background-color: #ffffff; /* Explicitly white background for screen content */
+            border-radius: 20px; /* Rounded corners for screen content */
+            padding: 30px; /* Padding inside screen content */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Subtle shadow for screen content */
+        }
+        .screen.active {
+            display: block; /* Show active screen */
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input[type="text"], input[type="number"], textarea {
+            border: 1px solid #e2e8f0; /* Lighter grey border */
+            border-radius: 12px; /* More rounded inputs */
+            padding: 15px 20px; /* More padding */
+            width: 100%;
+            font-size: 1.05rem; /* Slightly larger font */
+            color: #333;
+            background-color: #fcfdfe; /* Very light background for inputs */
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
+            outline: none;
+            border-color: #8b5cf6; /* Purple focus color */
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.25); /* More prominent focus ring */
+            background-color: #ffffff;
+        }
+        button:not(.header button) { /* Apply to general buttons, not header buttons */
+            background: linear-gradient(45deg, #8b5cf6, #6d28d9); /* Purple gradient button */
+            color: white;
+            padding: 16px 32px; /* Larger padding */
+            border-radius: 12px; /* More rounded buttons */
+            font-weight: 700; /* Bolder text */
+            letter-spacing: 0.05em; /* Slight letter spacing */
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.45); /* Stronger button shadow */
+            border: none;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem; /* Slightly larger font */
+        }
+        button:not(.header button):hover {
+            background: linear-gradient(45deg, #6d28d9, #8b5cf6); /* Reverse gradient on hover */
+            transform: translateY(-4px); /* More pronounced lift effect */
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.6);
+        }
+        button:not(.header button):active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+        }
+        button:not(.header button)::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.15);
+            transition: all 0.75s ease-out;
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+        button:not(.header button):hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .profile-card {
+            background-color: #fcfdfe; /* Very light background for profile cards */
+            border: 1px solid #e2e8f0;
+            border-radius: 18px; /* More rounded profile cards */
+            padding: 25px; /* More padding */
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .profile-card:hover {
+            transform: translateY(-5px); /* Lift on hover */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+        .profile-card .avatar {
+            width: 70px;
+            height: 70px;
+            background-color: #d8b4fe; /* Light purple avatar background */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: #8b5cf6;
+            font-weight: 600;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .profile-card .content {
+            flex-grow: 1;
+        }
+        .profile-card h4 {
+            color: #6d28d9; /* Purple for names */
+            font-size: 1.4rem; /* Larger name font */
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .profile-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+        .profile-card p.text-sm {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3; /* Light grey */
+            border-top: 4px solid #8b5cf6; /* Purple */
+            border-radius: 50%;
+            width: 35px; /* Slightly larger spinner */
+            height: 35px;
+            animation: spin 1s linear infinite;
+            margin: 25px auto; /* More margin */
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Headings */
+        h2 {
+            font-size: 2.8rem; /* Larger main headings */
+            font-weight: 800; /* Extra bold */
+            color: #333;
+            margin-bottom: 30px;
+            letter-spacing: -0.03em; /* Tighter letter spacing */
+            text-align: center;
+            background: linear-gradient(90deg, #8b5cf6, #6d28d9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h3 {
+            font-size: 2rem; /* Larger sub-headings */
+            font-weight: 700;
+            color: #444;
+            margin-top: 40px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        label {
+            color: #444;
+            font-weight: 600;
+            font-size: 1rem; /* Slightly larger labels */
+            margin-bottom: 10px;
+        }
+
+        /* Custom Alert Modal */
+        #customAlertDialog {
+            animation: fadeIn 0.3s ease-out;
+        }
+        #customAlertDialog > div {
+            transform: scale(0.95);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button id="createProfileNavBtn" onclick="showScreen('createProfileScreen')" class="active">Create Profile</button>
+        <button id="myMatchesNavBtn" onclick="showScreen('myMatchesScreen')">My Matches</button>
+        <button id="findMatchesNavBtn" onclick="showScreen('findMatchesScreen')">Find Matches</button>
+    </div>
+
+    <div class="container">
+        <!-- Create Profile Section (Screen 1) -->
+        <div id="createProfileScreen" class="screen active">
+            <h2>Create Your Profile</h2>
+            <div class="mb-6">
+                <label for="profileName" class="block mb-2">Name</label>
+                <input type="text" id="profileName" placeholder="John Doe" class="w-full">
+            </div>
+            <div class="mb-6">
+                <label for="profileAge" class="block mb-2">Age</label>
+                <input type="number" id="profileAge" placeholder="25" min="18" class="w-full">
+            </div>
+            <div class="mb-6">
+                <label for="profileInterests" class="block mb-2">Interests (comma-separated)</label>
+                <input type="text" id="profileInterests" placeholder="Hiking, Reading, Cooking, Art" class="w-full">
+            </div>
+            <div class="mb-8">
+                <label for="profileBio" class="block mb-2">Bio</label>
+                <textarea id="profileBio" rows="5" placeholder="Tell us about yourself and what you're looking for..." class="w-full"></textarea>
+            </div>
+            <button onclick="createProfile()" class="w-full">Create Profile</button>
+        </div>
+
+        <!-- My Matches Screen (Screen 2) -->
+        <div id="myMatchesScreen" class="screen">
+            <h2>Your Matches</h2>
+
+            <h3 class="mt-10 mb-5">Your Profile</h3>
+            <div id="myProfileDisplay" class="space-y-5">
+                <!-- User's single created profile will be displayed here -->
+            </div>
+
+            <h3 class="mt-10 mb-5">Connected Matches</h3>
+            <div id="connectedMatches" class="space-y-5">
+                <!-- Other mock profiles acting as "connected" matches will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Find Matches Screen (Screen 3) -->
+        <div id="findMatchesScreen" class="screen">
+            <h2>Find New Matches</h2>
+            <div class="mb-8">
+                <label for="preferences" class="block mb-2">Your Preferences</label>
+                <textarea id="preferences" rows="8" placeholder="I'm looking for someone who enjoys outdoor adventures, has a great sense of humor, and is passionate about art. Ideally, they are between 25-30 years old and value deep conversations." class="w-full"></textarea>
+            </div>
+            <button onclick="findMatches()" class="w-full">Find Matches with AI</button>
+
+            <div id="loadingSpinner" class="loading-spinner"></div>
+
+            <h3 class="mt-10 mb-5">AI-Suggested Matches</h3>
+            <div id="aiMatchesDisplay" class="space-y-5">
+                <!-- AI-Suggested Matches will be displayed here -->
+                <p class="text-gray-500 text-center">Enter your preferences above and click 'Find Matches' to see suggestions.</p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Global variable for the single user's profile
+        let currentUserProfile = null;
+
+        // Mock profiles for the AI to search through and for "connected matches"
+        let mockProfiles = [
+            { name: "Alice", age: 28, interests: "Hiking, Photography, Coffee, Travel", bio: "Loves exploring new trails and capturing beautiful moments. Always up for a good cup of coffee and planning the next adventure." },
+            { name: "Bob", age: 32, interests: "Coding, Gaming, Sci-Fi Movies, Cooking", bio: "Software engineer by day, avid gamer by night. Enjoys deep conversations about technology and the future, and can whip up a mean pasta." },
+            { name: "Charlie", age: 26, interests: "Art, Music, Yoga, Reading", bio: "Creative soul who finds joy in painting and playing the guitar. Practices yoga for peace of mind and loves getting lost in a good book." },
+            { name: "Diana", age: 30, interests: "Reading, Travel, Cooking, History", bio: "Bookworm with a passion for discovering new cultures through travel and culinary experiments. Fascinated by historical events." },
+            { name: "Eve", age: 29, interests: "Fitness, Outdoors, Animals, Volunteering", bio: "Active and adventurous, loves spending time outdoors with her dog. Passionate about animal welfare and giving back to the community." },
+            { name: "Frank", age: 35, interests: "Sports, Craft Beer, History, Board Games", bio: "Enjoys watching and playing sports. Always keen to try new craft beers and learn about historical events. A true board game enthusiast." },
+            { name: "Grace", age: 27, interests: "Gardening, Baking, Indie Films, Cats", bio: "Finds peace in her garden and joy in baking. A big fan of indie films and spending cozy evenings with her feline friends." },
+            { name: "Henry", age: 31, interests: "Photography, Cycling, Jazz Music, Coffee", bio: "Passionate photographer who loves cycling through scenic routes. Enjoys a good cup of coffee while listening to classic jazz." }
+        ];
+
+        // Function to display the user's own profile
+        function displayMyProfile() {
+            const myProfileDisplayDiv = document.getElementById('myProfileDisplay');
+            myProfileDisplayDiv.innerHTML = '';
+
+            if (currentUserProfile) {
+                const profileCard = `
+                    <div class="profile-card">
+                        <div class="avatar">${currentUserProfile.name.charAt(0)}</div>
+                        <div class="content">
+                            <h4 class="text-gray-800">${currentUserProfile.name}, ${currentUserProfile.age}</h4>
+                            <p class="text-gray-600 text-sm mb-2">Interests: ${currentUserProfile.interests}</p>
+                            <p class="text-gray-700">${currentUserProfile.bio}</p>
+                        </div>
+                    </div>
+                `;
+                myProfileDisplayDiv.innerHTML = profileCard;
+            } else {
+                myProfileDisplayDiv.innerHTML = '<p class="text-gray-500 text-center">Your profile is not created yet. Go to "Create Profile" tab to make one!</p>';
+            }
+        }
+
+        // Function to display "connected matches" (all mock profiles as if they are matches)
+        function displayConnectedMatches() {
+            const connectedMatchesDiv = document.getElementById('connectedMatches');
+            connectedMatchesDiv.innerHTML = '';
+
+            if (mockProfiles.length === 0) {
+                connectedMatchesDiv.innerHTML = '<p class="text-gray-500 text-center">No other profiles available as matches.</p>';
+                return;
+            }
+
+            mockProfiles.forEach(profile => {
+                // Optionally, you could exclude the currentUserProfile from this list if you want
+                // For a mockup, we'll just show all mock profiles here as "connected"
+                const profileCard = `
+                    <div class="profile-card">
+                        <div class="avatar">${profile.name.charAt(0)}</div>
+                        <div class="content">
+                            <h4 class="text-gray-800">${profile.name}, ${profile.age}</h4>
+                            <p class="text-gray-600 text-sm mb-2">Interests: ${profile.interests}</p>
+                            <p class="text-gray-700">${profile.bio}</p>
+                        </div>
+                    </div>
+                `;
+                connectedMatchesDiv.innerHTML += profileCard;
+            });
+        }
+
+        // Modified createProfile function
+        window.createProfile = function() {
+            if (currentUserProfile) {
+                alert("You can only create one profile for this mockup. Your profile is already set!");
+                return;
+            }
+
+            const name = document.getElementById('profileName').value.trim();
+            const age = parseInt(document.getElementById('profileAge').value, 10);
+            const interests = document.getElementById('profileInterests').value.trim();
+            const bio = document.getElementById('profileBio').value.trim();
+
+            if (!name || isNaN(age) || age < 18 || !interests || !bio) {
+                alert("Please fill in all profile fields correctly (Age must be 18+).");
+                return;
+            }
+
+            currentUserProfile = { name, age, interests, bio };
+
+            // Disable form fields
+            document.getElementById('profileName').disabled = true;
+            document.getElementById('profileAge').disabled = true;
+            document.getElementById('profileInterests').disabled = true;
+            document.getElementById('profileBio').disabled = true;
+            document.querySelector('#createProfileScreen button').disabled = true;
+            document.querySelector('#createProfileScreen button').textContent = 'Profile Created!';
+            document.querySelector('#createProfileScreen button').style.background = '#ccc';
+            document.querySelector('#createProfileScreen button').style.boxShadow = 'none';
+            document.querySelector('#createProfileScreen button').style.cursor = 'not-allowed';
+
+
+            alert("Profile created successfully! Navigate to 'My Matches' to see your profile and other connected profiles, or 'Find Matches' for AI suggestions.");
+            displayMyProfile(); // Update the 'My Profile' section on the 'My Matches' tab
+        };
+
+        // Function to find matches using a simulated LLM call
+        window.findMatches = async function() {
+            const preferences = document.getElementById('preferences').value.trim();
+            const aiMatchesDisplay = document.getElementById('aiMatchesDisplay');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            if (!preferences) {
+                aiMatchesDisplay.innerHTML = '<p class="text-red-500 text-center">Please enter your preferences to find matches.</p>';
+                return;
+            }
+
+            aiMatchesDisplay.innerHTML = '';
+            loadingSpinner.style.display = 'block';
+
+            // Construct the prompt for the LLM
+            const prompt = `
+                You are a dating app matching AI. I will provide you with a user's preferences and a list of existing profiles.
+                Your task is to suggest the top 3-5 profiles from the list that best match the user's preferences.
+                Focus on compatibility based on interests, bio, and age if specified.
+                If no profiles are a good match, state that clearly and suggest broadening preferences.
+                Format your response as a clear, engaging list of suggested profiles, mentioning their name, age, and a brief, compelling reason why they are a good match based on their interests and bio. Use a friendly, encouraging tone.
+
+                User Preferences: "${preferences}"
+
+                Available Profiles:
+                ${mockProfiles.map(p => `- Name: ${p.name}, Age: ${p.age}, Interests: ${p.interests}, Bio: ${p.bio}`).join('\n')}
+
+                Suggested Matches:
+            `;
+
+            try {
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = ""; // Canvas will provide this at runtime
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const aiResponseText = result.candidates[0].content.parts[0].text;
+                    aiMatchesDisplay.innerHTML = `<div class="profile-card"><h4 class="text-lg font-semibold text-gray-800 mb-2">AI Matcher Says:</h4><p class="text-gray-700 whitespace-pre-wrap">${aiResponseText}</p></div>`;
+                } else {
+                    aiMatchesDisplay.innerHTML = '<p class="text-red-500 text-center">Could not get a match from the AI. Please try again.</p>';
+                }
+            } catch (error) {
+                console.error("Error fetching AI matches:", error);
+                aiMatchesDisplay.innerHTML = '<p class="text-red-500 text-center">An error occurred while finding matches. Please check your internet connection and try again.</p>';
+            } finally {
+                loadingSpinner.style.display = 'none';
+            }
+        };
+
+        // Function to switch between screens
+        window.showScreen = function(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            // Show the selected screen
+            document.getElementById(screenId).classList.add('active');
+
+            // Update active navigation button
+            document.querySelectorAll('.header button').forEach(button => {
+                button.classList.remove('active');
+            });
+            if (screenId === 'createProfileScreen') {
+                document.getElementById('createProfileNavBtn').classList.add('active');
+            } else if (screenId === 'myMatchesScreen') {
+                document.getElementById('myMatchesNavBtn').classList.add('active');
+                displayMyProfile(); // Update user's own profile display
+                displayConnectedMatches(); // Update connected matches display
+            } else if (screenId === 'findMatchesScreen') {
+                document.getElementById('findMatchesNavBtn').classList.add('active');
+                // Clear AI-suggested matches when switching to this tab, so it's fresh for a new search
+                document.getElementById('aiMatchesDisplay').innerHTML = '<p class="text-gray-500 text-center">Enter your preferences above and click \'Find Matches\' to see suggestions.</p>';
+            }
+        };
+
+        // Simple alert replacement function
+        function alert(message) {
+            const existingModal = document.getElementById('customAlertDialog');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            const modalHtml = `
+                <div id="customAlertDialog" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+                        <h3 class="text-xl font-bold mb-4 text-gray-800">Notification</h3>
+                        <p class="text-gray-700 mb-6">${message}</p>
+                        <button onclick="document.getElementById('customAlertDialog').remove()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors">OK</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        // Initialize the app by showing the create profile screen on load
+        document.addEventListener('DOMContentLoaded', () => {
+            showScreen('createProfileScreen'); // Show the create profile screen by default
+        });
+    </script>
+</body>
+</html>
